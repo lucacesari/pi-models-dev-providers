@@ -24,7 +24,7 @@ export const piModelsDevProvidersMain = (pi: ExtensionAPI) =>
       )
     )
 
-    pi.registerCommand('modeldev-refresh', {
+    pi.registerCommand('modelsdev-refresh', {
       description: 'Refresh Model.dev providers',
       handler: (_args, ctx) => pipe(refresh(pi, ctx), Effect.runPromise)
     })
