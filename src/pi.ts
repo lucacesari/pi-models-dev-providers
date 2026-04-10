@@ -2,18 +2,16 @@ import type {
   ExtensionAPI,
   ExtensionCommandContext
 } from '@mariozechner/pi-coding-agent'
-import * as path from 'node:path'
-import * as os from 'node:os'
 import { Array, Chunk, Effect, pipe, Stream } from 'effect'
-import {
-  fetchOpenAiCompatibleModels,
-  OpenAiCompatibleModel
-} from './models.loader.js'
-import { promises as fs } from 'node:fs'
+import { fetchOpenAiCompatibleModels } from './models.loader.js'
 import { getProviders } from '@mariozechner/pi-ai'
 import { not } from 'effect/Boolean'
-
-const MODELS_CACHE = path.join(os.homedir(), '.pi', 'models.dev.cache')
+import { loadActiveProviders } from './config.js'
+import {
+  loadModelsDevProvidersCache,
+  removeModelsDevProvidersCache,
+  saveModelsDevProvidersCache
+} from './cache'
 
 export const piModelsDevProvidersMain = (pi: ExtensionAPI) =>
   Effect.gen(function* () {
@@ -34,37 +32,40 @@ const registerModelDevProviders = (pi: ExtensionAPI) =>
     })
   })
 
-const loadModels = () =>
-  pipe(
-    Effect.tryPromise(() => fs.access(MODELS_CACHE)),
-    Effect.flatMap(() =>
-      Effect.tryPromise(() => fs.readFile(MODELS_CACHE, 'utf-8'))
-    ),
-    Effect.map((string) => JSON.parse(string) as Array<OpenAiCompatibleModel>),
-    Effect.orElse(() => {
-      const providers = getProviders()
-      return pipe(
-        fetchOpenAiCompatibleModels(),
-        Stream.filter(([provider, _]) =>
-          not(Array.some(providers, (p) => p === provider))
-        ),
-        Stream.runCollect,
-        Effect.map(Chunk.toArray),
-        Effect.tap((models) =>
-          Effect.tryPromise(() =>
-            fs.writeFile(MODELS_CACHE, JSON.stringify(models, null, 2))
-          )
+const loadModels = () => {
+  return pipe(
+    loadModelsDevProvidersCache(),
+    Effect.orElse(() =>
+      Effect.gen(function* () {
+        const activeProviders = yield* loadActiveProviders()
+        const providers = getProviders()
+
+        const importedProviders = yield* pipe(
+          fetchOpenAiCompatibleModels(),
+          Stream.filter(([provider, _]) =>
+            Array.some(activeProviders, (p) => p === provider)
+          ),
+          Stream.filter(([provider, _]) =>
+            not(Array.some(providers, (p) => p === provider))
+          ),
+          Stream.runCollect,
+          Effect.map(Chunk.toArray)
         )
-      )
-    })
+
+        yield* saveModelsDevProvidersCache(importedProviders)
+
+        return importedProviders
+      })
+    )
   )
+}
 
 const refresh = (pi: ExtensionAPI, ctx: ExtensionCommandContext) =>
   Effect.gen(function* () {
     ctx.ui.notify(`Refreshing Models.dev providers...`, 'info')
     yield* unregisterModelDevProviders(pi)
 
-    yield* Effect.tryPromise(() => fs.rm(MODELS_CACHE))
+    yield* removeModelsDevProvidersCache()
 
     yield* registerModelDevProviders(pi)
     ctx.ui.notify(`Models.dev providers reloaded`, 'info')
