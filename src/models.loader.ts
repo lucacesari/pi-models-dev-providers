@@ -1,7 +1,9 @@
-import { Model } from '@mariozechner/pi-ai'
 import { Schema } from '@effect/schema'
-import { Effect, pipe, Record, Stream, Array } from 'effect'
-import { ProviderConfig } from '@mariozechner/pi-coding-agent'
+import { String, Effect, pipe, Record, Stream, Array } from 'effect'
+import {
+  ProviderConfig,
+  ProviderModelConfig
+} from '@mariozechner/pi-coding-agent'
 import { UnknownException } from 'effect/Cause'
 import { ParseError } from '@effect/schema/ParseResult'
 
@@ -64,19 +66,16 @@ const mapToProvider = (
 ): ProviderConfig => {
   return {
     baseUrl: selectedProvider.api ?? '',
-    apiKey: selectedProvider.id,
+    apiKey: `${String.kebabToSnake(selectedProvider.id).toUpperCase()}_API_KEY`,
     api: 'openai-completions',
     models: pipe(
       selectedProvider.models,
       Record.toEntries,
       Array.filter(([_, { tool_call }]) => tool_call ?? false),
       Array.map(
-        ([modelId, m]): Model<any> => ({
-          baseUrl: selectedProvider.api ?? '',
+        ([modelId, m]): ProviderModelConfig => ({
           id: modelId,
           name: m.name ?? modelId,
-          api: 'openai-completions',
-          provider: selectedProvider.id,
           reasoning: m.reasoning === true,
           input: m.modalities?.input?.includes('image')
             ? ['text', 'image']
