@@ -88,12 +88,19 @@ const mapToProvider = (
             cacheWrite: m.cost?.cache_write || 0
           },
           contextWindow: m.limit?.context || 4096,
-          maxTokens: m.limit?.output || 4096
+          maxTokens: m.limit?.output || 4096,
+          compat: {
+            requiresAssistantAfterToolResult:
+              providerRequiresAssistantAfterToolResult(selectedProvider.id)
+          }
         })
       )
     )
   }
 }
+
+const providerRequiresAssistantAfterToolResult = (providerId: string) =>
+  providerId === 'cortecs'
 
 export type OpenAiCompatibleModel = [string, ProviderConfig]
 
