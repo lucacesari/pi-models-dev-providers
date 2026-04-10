@@ -1,6 +1,6 @@
 {
   "name": "pi-models-dev-providers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A pi-coding-agent extension to use model.dev providers",
   "type": "module",
   "license": "MIT",
@@ -39,8 +39,10 @@
   ],
   "dependencies": {
     "@effect/schema": "^0.75.5",
-    "@mariozechner/pi-ai": "^0.62.0",
-    "@mariozechner/pi-coding-agent": "^0.62.0",
     "effect": "^3.21.0"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*"
   }
 }
