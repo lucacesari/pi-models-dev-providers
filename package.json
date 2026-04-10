@@ -1,11 +1,9 @@
 {
   "name": "pi-models-dev-providers",
   "version": "1.0.0",
-  "description": "A pi-coding-agent extension that adds providers from model.dev providers",
+  "description": "A pi-coding-agent extension to use model.dev providers",
   "type": "module",
-  "author": "Luca Cesari",
   "license": "MIT",
-  "readme": "README.md",
   "keywords": [
     "pi",
     "pi-package",
@@ -15,9 +13,18 @@
     "models.dev",
     "providers"
   ],
+  "readme": "README.md",
+  "homepage": "https://codeberg.org/lucacesari/pi-models-dev-providers.git#readme",
   "repository": {
     "type": "git",
     "url": "https://codeberg.org/lucacesari/pi-models-dev-providers.git"
+  },
+  "bugs": {
+    "url": "https://codeberg.org/lucacesari/pi-models-dev-providers/issues"
+  },
+  "author": {
+    "name": "Luca Cesari",
+    "url": "https://luca.cesari.me"
   },
   "pi": {
     "extensions": [
