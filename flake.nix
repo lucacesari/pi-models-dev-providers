@@ -1,37 +1,13 @@
 {
-  description = "Development environment for pi-models-dev-providers";
-
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+
+    blueprint.url = "github:numtide/blueprint";
+    blueprint.inputs.nixpkgs.follows = "nixpkgs";
+
+    treefmt.url = "github:numtide/treefmt-nix";
+    treefmt.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-      in
-      {
-        devShells.default = pkgs.mkShell {
-
-          packages = with pkgs; [
-            bun
-            biome
-            nixfmt-tree
-          ];
-
-          shellHook = ''
-            export BIOME_BINARY="${pkgs.biome}/bin/biome"
-          '';
-        };
-      }
-    );
+  outputs = inputs: inputs.blueprint { inherit inputs; };
 }
