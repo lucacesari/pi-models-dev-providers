@@ -44,5 +44,15 @@
   "peerDependencies": {
     "@mariozechner/pi-ai": "*",
     "@mariozechner/pi-coding-agent": "*"
+  },
+  "scripts": {
+    "dev": "pnpm run --recursive dev",
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "biome check .",
+    "format": "biome format . --write"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   }
 }

@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{pkgs, ...}:
 pkgs.mkShellNoCC {
   packages = with pkgs; [
     forgejo-runner
     forgejo-cli
-    bun
+    pnpm
+    nodejs
     biome
   ];
 
