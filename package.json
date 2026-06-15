@@ -1,6 +1,6 @@
 {
   "name": "pi-models-dev-providers",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A pi-coding-agent extension to use model.dev providers",
   "type": "module",
   "license": "MIT",

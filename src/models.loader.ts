@@ -103,7 +103,7 @@ const mapToProvider = (
 ): ProviderConfig => {
   return {
     baseUrl: selectedProvider.api ?? '',
-    apiKey: `${String.kebabToSnake(selectedProvider.id).toUpperCase()}_API_KEY`,
+    apiKey: `$${String.kebabToSnake(selectedProvider.id).toUpperCase()}_API_KEY`,
     api: 'openai-completions',
     models: pipe(
       selectedProvider.models,
