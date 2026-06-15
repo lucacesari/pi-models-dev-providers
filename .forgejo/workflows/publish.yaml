@@ -1,0 +1,19 @@
+name: Publish
+defaults:
+  run:
+    shell: nix develop --command {0}
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  publish:
+    runs-on: nix
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install dependecies
+        run: bun ci
+      - name: Publish
+        env:
+          NPM_TOKEN: ${{secrets.NPM_REGISTRY_TOKEN}}
+        run: bun publish --access public
