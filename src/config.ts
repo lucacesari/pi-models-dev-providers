@@ -1,7 +1,7 @@
 import * as path from 'node:path'
 import * as os from 'node:os'
 import { Effect, pipe } from 'effect'
-import { Schema } from '@effect/schema'
+import { Schema } from 'effect'
 import { promises as fs } from 'node:fs'
 
 export const PROVIDERS_CONFIG_PATH = path.join(

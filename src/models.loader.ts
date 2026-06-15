@@ -1,11 +1,10 @@
-import { Schema } from '@effect/schema'
-import { Array, Effect, pipe, Record, Stream, String } from 'effect'
+import { Array, Effect, pipe, Record, Stream, String, Schema } from 'effect'
 import {
   ProviderConfig,
   ProviderModelConfig
-} from '@mariozechner/pi-coding-agent'
+} from '@earendil-works/pi-coding-agent'
 import { not } from 'effect/Boolean'
-import { getProviders } from '@mariozechner/pi-ai'
+import { getProviders } from '@earendil-works/pi-ai'
 
 const MODELS_DEV_API_JSON = 'https://models.dev/api.json'
 

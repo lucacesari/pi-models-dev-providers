@@ -1,7 +1,7 @@
 import type {
   ExtensionAPI,
   ExtensionCommandContext
-} from '@mariozechner/pi-coding-agent'
+} from '@earendil-works/pi-coding-agent'
 import { Array, Effect, pipe, Record } from 'effect'
 import { fetchModelsDevProviders } from './models.loader.js'
 import { loadActiveProviders } from './config.js'

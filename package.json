@@ -38,12 +38,11 @@
     "README.md"
   ],
   "dependencies": {
-    "@effect/schema": "^0.75.5",
     "effect": "^3.21.0"
   },
   "peerDependencies": {
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-coding-agent": "*"
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
   },
   "scripts": {
     "dev": "pnpm run --recursive dev",

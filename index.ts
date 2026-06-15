@@ -1,4 +1,4 @@
-import { ExtensionAPI } from '@mariozechner/pi-coding-agent'
+import { ExtensionAPI } from '@earendil-works/pi-coding-agent'
 import { Effect, pipe } from 'effect'
 import { piModelsDevProvidersMain } from './src/pi'
 
