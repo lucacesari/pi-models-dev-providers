@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs'
 import { Effect, pipe } from 'effect'
+import { MODELS_CACHE } from './constants'
 import type { ModelsConfig } from './models.loader'
-import { MODELS_CACHE } from "./constants";
 
 export const loadModelsDevProvidersCache = () =>
   pipe(

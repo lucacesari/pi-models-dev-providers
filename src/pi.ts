@@ -1,8 +1,8 @@
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent'
 import { Effect, pipe } from 'effect'
 import { removeModelsDevProvidersCache } from './cache'
-import { selectModelsDevProviders } from "./command/select";
-import { refresh, registerModelDevProviders } from "./command/refresh";
+import { refresh, registerModelDevProviders } from './command/refresh'
+import { selectModelsDevProviders } from './command/select'
 
 export const piModelsDevProvidersMain = (pi: ExtensionAPI) =>
   Effect.gen(function* () {
@@ -24,6 +24,7 @@ export const piModelsDevProvidersMain = (pi: ExtensionAPI) =>
 
     pi.registerCommand('modelsdev-select', {
       description: 'Select Models.dev providers to enable',
-      handler: (_args, ctx) => pipe(selectModelsDevProviders(pi, ctx), Effect.runPromise)
+      handler: (_args, ctx) =>
+        pipe(selectModelsDevProviders(pi, ctx), Effect.runPromise)
     })
   })
