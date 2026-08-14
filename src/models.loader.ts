@@ -1,4 +1,4 @@
-import { getProviders } from '@earendil-works/pi-ai'
+import { getBuiltinProviders } from '@earendil-works/pi-ai/providers/all'
 import type {
   ProviderConfig,
   ProviderModelConfig
@@ -142,5 +142,7 @@ const fetchOpenAiCompatibleModels = () =>
     Stream.fromIterableEffect,
     Stream.filter(({ npm }) => npm === '@ai-sdk/openai-compatible'),
     Stream.filter(({ models }) => !Record.isEmptyRecord(models)),
-    Stream.filter((p) => not(Array.some(getProviders(), (id) => id === p.id)))
+    Stream.filter((p) =>
+      not(Array.some(getBuiltinProviders(), (id) => id === p.id))
+    )
   )
