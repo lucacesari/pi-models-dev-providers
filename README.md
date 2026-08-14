@@ -21,17 +21,9 @@ pi install /path/to/pi-models-dev-providers
 
 ## Configuration
 
-1. Create a configuration file at `~/pi/agent/modelsdev-config.json`:
-   ```json
-   {
-     "providers": [
-       "cortecs",
-       "scaleway"
-     ]
-   }
-   ```
+1. Start `pi`, run the command `/modelsdev-select` and choose the required providers.
 
-2. Add your API keys for each provider in `~/.pi/agent/auth.json`:
+2. Add your API keys for each provider in `~/.pi/agent/auth.json`
    ```json
    {
      "cortecs": {
@@ -40,6 +32,7 @@ pi install /path/to/pi-models-dev-providers
      }
    }
    ```
+   or set the matching `*_API_KEY` environment variable.
 
 ## Usage
 

@@ -1,12 +1,8 @@
-import { Array, Effect, pipe, Record, Stream, String, Schema } from 'effect'
-import {
-  ProviderConfig,
-  ProviderModelConfig
-} from '@earendil-works/pi-coding-agent'
-import { not } from 'effect/Boolean'
 import { getProviders } from '@earendil-works/pi-ai'
-
-const MODELS_DEV_API_JSON = 'https://models.dev/api.json'
+import type { ProviderConfig, ProviderModelConfig } from '@earendil-works/pi-coding-agent'
+import { Array, Effect, pipe, Record, Schema, Stream, String } from 'effect'
+import { not } from 'effect/Boolean'
+import { MODELS_DEV_API_JSON } from "./constants";
 
 const ModelsDevModel = Schema.Struct({
   id: Schema.String,
@@ -61,41 +57,25 @@ export type ModelsConfig = {
 
 export const fetchModelsDevProviders = (
   activeProviders: ReadonlyArray<string>
-) => {
-  const providers = getProviders()
-
-  return pipe(
-    fetchOpenAiCompatibleModels(),
-    Stream.filter(([provider, _]) =>
-      Array.some(activeProviders, (p) => p === provider)
-    ),
-    Stream.filter(([provider, _]) =>
-      not(Array.some(providers, (p) => p === provider))
-    ),
-    Stream.runCollect,
-    Effect.map(Record.fromEntries),
-    Effect.map(
-      (providers): ModelsConfig => ({
-        providers
-      })
+) =>
+    pipe(
+        fetchOpenAiCompatibleModels(),
+        Stream.filter((p) => Array.some(activeProviders, (id) => id === p.id)),
+        Stream.map(
+            (selectedProvider) =>
+                [selectedProvider.id, mapToProvider(selectedProvider)] as const
+        ),
+        Stream.filter(([provider, _]) =>
+            Array.some(activeProviders, (p) => p === provider)
+        ),
+        Stream.runCollect,
+        Effect.map(Record.fromEntries),
+        Effect.map(
+            (providers): ModelsConfig => ({
+                providers
+            })
+        )
     )
-  )
-}
-
-const fetchOpenAiCompatibleModels = () =>
-  pipe(
-    Effect.tryPromise(() => fetch(MODELS_DEV_API_JSON)),
-    Effect.flatMap((response) => Effect.tryPromise(() => response.json())),
-    Effect.flatMap(Schema.decodeUnknown(ModelsDevProviderRecord)),
-    Effect.map(Record.values),
-    Stream.fromIterableEffect,
-    Stream.filter(({ npm }) => npm === '@ai-sdk/openai-compatible'),
-    Stream.filter(({ models }) => !Record.isEmptyRecord(models)),
-    Stream.map(
-      (selectedProvider) =>
-        [selectedProvider.id, mapToProvider(selectedProvider)] as const
-    )
-  )
 
 const mapToProvider = (
   selectedProvider: ModelsDevModelProvider
@@ -136,3 +116,28 @@ const mapToProvider = (
 
 const providerRequiresAssistantAfterToolResult = (providerId: string) =>
   providerId === 'cortecs'
+
+export interface ProviderItem {
+    readonly id: string,
+    readonly name: string
+}
+
+export const fetchAvailableProviders = () =>
+    pipe(
+        fetchOpenAiCompatibleModels(),
+        Stream.map((p): ProviderItem => ({ id: p.id, name: p.name })),
+        Stream.runCollect,
+        Effect.map(Array.fromIterable)
+    )
+
+const fetchOpenAiCompatibleModels = () =>
+    pipe(
+        Effect.tryPromise(() => fetch(MODELS_DEV_API_JSON)),
+        Effect.flatMap((response) => Effect.tryPromise(() => response.json())),
+        Effect.flatMap(Schema.decodeUnknown(ModelsDevProviderRecord)),
+        Effect.map(Record.values),
+        Stream.fromIterableEffect,
+        Stream.filter(({ npm }) => npm === '@ai-sdk/openai-compatible'),
+        Stream.filter(({ models }) => !Record.isEmptyRecord(models)),
+        Stream.filter((p) => not(Array.some(getProviders(), (id) => id === p.id))),
+    )

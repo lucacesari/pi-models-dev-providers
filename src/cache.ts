@@ -1,10 +1,7 @@
-import { Effect, pipe } from 'effect'
-import * as path from 'node:path'
-import * as os from 'node:os'
 import { promises as fs } from 'node:fs'
-import { ModelsConfig } from './models.loader'
-
-const MODELS_CACHE = path.join(os.homedir(), '.pi', 'agent', 'modelsdev.cache')
+import { Effect, pipe } from 'effect'
+import type { ModelsConfig } from './models.loader'
+import { MODELS_CACHE } from "./constants";
 
 export const loadModelsDevProvidersCache = () =>
   pipe(
