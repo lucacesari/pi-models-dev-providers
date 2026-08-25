@@ -1,6 +1,6 @@
 {
   "name": "pi-models-dev-providers",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A pi-coding-agent extension to use model.dev providers",
   "type": "module",
   "license": "MIT",
@@ -14,10 +14,10 @@
     "providers"
   ],
   "readme": "README.md",
-  "homepage": "https://codeberg.org/lucacesari/pi-models-dev-providers.git#readme",
+  "homepage": "https://github.com/lucacesari/pi-models-dev-providers.git#readme",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/lucacesari/pi-models-dev-providers.git"
+    "url": "https://github.com/lucacesari/pi-models-dev-providers.git"
   },
   "bugs": {
     "url": "https://codeberg.org/lucacesari/pi-models-dev-providers/issues"
